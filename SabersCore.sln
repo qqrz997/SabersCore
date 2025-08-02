@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSaber", "CustomSaber\CustomSaber.csproj", "{40B187B3-A16F-43F3-B62D-0777F08345F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SabersCore", "SabersCore\SabersCore.csproj", "{A449AF59-0DC2-44B6-86E5-386B0E883305}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{40B187B3-A16F-43F3-B62D-0777F08345F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{40B187B3-A16F-43F3-B62D-0777F08345F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{40B187B3-A16F-43F3-B62D-0777F08345F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{40B187B3-A16F-43F3-B62D-0777F08345F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A449AF59-0DC2-44B6-86E5-386B0E883305}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A449AF59-0DC2-44B6-86E5-386B0E883305}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A449AF59-0DC2-44B6-86E5-386B0E883305}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A449AF59-0DC2-44B6-86E5-386B0E883305}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

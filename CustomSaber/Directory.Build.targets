@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PluginResourcesPath>$(OutputPath)..\..\..\..\SabersCore\Resources\</PluginResourcesPath>
+    </PropertyGroup>
+
+    <Target Name="CopyToResources" AfterTargets="Build">
+        <ItemGroup>
+            <FilesToCopy Include="$(OutputPath)CustomSaber.dll"/>
+        </ItemGroup>
+
+        <Message Text="Copying CustomSaber.dll to Resources..."/>
+        <Message Text="FilesToCopy: @(FilesToCopy)" Importance="high"/>
+        <Message Text="DestFiles:
+        @(FilesToCopy->'$(PluginResourcesPath)%(RecursiveDir)%(Filename)%(Extension)')"/>
+
+        <Copy SourceFiles="@(FilesToCopy)"
+              DestinationFiles="@(FilesToCopy->'$(PluginResourcesPath)%(RecursiveDir)%(Filename)%(Extension)')"/>
+    </Target>
+
+    <Target Name="CustomClean" BeforeTargets="CoreClean">
+        <Message Text="Inside Custom Clean" Importance="high"/>
+        <ItemGroup>
+            <_CustomFilesToDelete Include="$(PluginResourcesPath)**\*"/>
+        </ItemGroup>
+        <Delete Files='@(_CustomFilesToDelete)'/>
+    </Target>
+</Project>
