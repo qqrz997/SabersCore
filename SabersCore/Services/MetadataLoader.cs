@@ -21,7 +21,7 @@ internal class MetadataLoader : IAsyncInitializable, IDisposable, ISaberMetadata
     private readonly SpriteCache spriteCache;
     private readonly IPrefabCache prefabCache;
     private readonly SaberMetadataCacheMigrationManager saberMetadataCacheMigrationManager;
-    private readonly SaberFileManager saberFileManager;
+    private readonly ISaberFileManager saberFileManager;
     private readonly ISaberMetadataCache saberMetadataCache;
     private readonly DirectoryManager directoryManager;
     private readonly SaberMetadataConverter saberMetadataConverter;
@@ -30,7 +30,7 @@ internal class MetadataLoader : IAsyncInitializable, IDisposable, ISaberMetadata
         SpriteCache spriteCache,
         IPrefabCache prefabCache,
         SaberMetadataCacheMigrationManager saberMetadataCacheMigrationManager,
-        SaberFileManager saberFileManager, 
+        ISaberFileManager saberFileManager, 
         ISaberMetadataCache saberMetadataCache, 
         DirectoryManager directoryManager,
         SaberMetadataConverter saberMetadataConverter)
@@ -96,7 +96,7 @@ internal class MetadataLoader : IAsyncInitializable, IDisposable, ISaberMetadata
         IProgress<MetadataLoaderProgress> stageChangedProgress = new Progress<MetadataLoaderProgress>(p => CurrentProgress = p);
         
         stageChangedProgress.Report(new("Retrieving Saber Files"));
-        var localSaberFiles = await saberFileManager.GetSaberFilesAsync(token, simpleIntProgress);
+        var localSaberFiles = await saberFileManager.ReloadAllSaberFiles(token, simpleIntProgress);
         var installedSaberHashes = localSaberFiles.Select(file => file.Hash).ToHashSet();
 
         stageChangedProgress.Report(new("Loading Cache"));

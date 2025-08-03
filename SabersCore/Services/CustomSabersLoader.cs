@@ -53,9 +53,9 @@ internal class CustomSabersLoader : ISabersLoader
                 throw new OperationCanceledException();
             }
 
-            if (keepSaberInstance && saberData is CustomSaberData customSaber)
+            if (keepSaberInstance)
             {
-                prefabCache.AddPrefab(customSaber);
+                prefabCache.AddPrefab(saberData);
             }
 
             return saberData;

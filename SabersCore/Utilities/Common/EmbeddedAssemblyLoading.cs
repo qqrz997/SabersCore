@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace SabersCore.Utilities.Common;
 
-public class EmbeddedAssemblyLoading
+internal class EmbeddedAssemblyLoading
 {
     private const string ResourcesPath = "SabersCore.Resources.";
     

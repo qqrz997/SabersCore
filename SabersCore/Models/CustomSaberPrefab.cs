@@ -23,7 +23,7 @@ internal class CustomSaberPrefab : ISaberPrefab
         else Plugin.Log.Warn($"Prefab \"{prefab.name}\" is missing a RightSaber GameObject");
     }
 
-    public SaberInstanceSet Instantiate() => new(prefab);
+    public SaberInstanceSet Instantiate() => new SaberInstanceSet(prefab).WithTrails(leftTrails, rightTrails);
     public ITrailData[] GetTrailsForType(SaberType saberType) => 
         saberType == SaberType.SaberA ? leftTrails : rightTrails;
 

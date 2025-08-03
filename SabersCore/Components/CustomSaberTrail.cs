@@ -35,8 +35,6 @@ public class CustomSaberTrail : SaberTrail
     
     public void SetColor(Color color)
     {
-        Plugin.Log.Info($"Setting color to {color}");
-        Plugin.Log.Info($"UseCustomColor: {trailData.UseCustomColor}");
         _color = (trailData.UseCustomColor ? trailData.CustomColor : color) * trailData.ColorMultiplier;
         
         foreach (var trailMaterial in _trailRenderer._meshRenderer.materials)

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace SabersCore.Utilities.Common;
 
-public class ShaderRepairUtils
+internal class ShaderRepairUtils
 {
     /// <summary>
     /// Uses AssetBundleLoadingTools to replace shaders with single-pass-instanced-compatible shaders
