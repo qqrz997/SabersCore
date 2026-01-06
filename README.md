@@ -14,7 +14,7 @@ reduce conflicts by preventing multiple sources accessing the same assets.
 > i.e. [BSManager](https://bsmg.wiki/pc-modding.html#bsmanager).
 
 Place the contents of the unzipped folder from the latest
-[release](https://github.com/qqrz997/CustomSabersLite/releases/latest) into your Beat Saber installation folder. If you
+[release](https://github.com/qqrz997/SabersCore/releases/latest) into your Beat Saber installation folder. If you
 need more information regarding manual installation of mods
 [this wiki page](https://bsmg.wiki/pc-modding.html#manual-installation) will help. For further help with installing
 mods, join the [Beat Saber Modding Group](https://discord.gg/beatsabermods) discord server.
