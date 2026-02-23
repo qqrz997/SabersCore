@@ -5,9 +5,6 @@ namespace SabersCore.Models;
 
 public interface ISaber
 {
-    // todo: remove this when tricksaber is dead https://www.youtube.com/watch?v=UqFORtFuyN0
-    public bool InUse { get; set; }
-    
     public GameObject GameObject { get; }
     public EventManager? EventManager { get; }
 
