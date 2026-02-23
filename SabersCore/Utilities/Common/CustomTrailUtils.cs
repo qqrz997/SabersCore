@@ -72,13 +72,13 @@ public static class CustomTrailUtils
     {
         var texts = saberObject.GetComponentsInChildren<Text>();
         var transformData = texts
-            .Where(text => text.text.Contains("\"IsTop\":"))
+            .Where(text => text.text.Contains("\"isTop\":"))
             .Select(text => (
                 Transform: text.transform, 
                 Data: JsonConvert.DeserializeObject<WhackerTrailTransform>(text.text)))
             .ToList();
         var trailData = texts
-            .Where(t => t.text.Contains("\"TrailColor\":"))
+            .Where(t => t.text.Contains("\"trailColor\":"))
             .Select(text => (
                 Material: text.GetComponent<MeshRenderer>().material,
                 Data: JsonConvert.DeserializeObject<WhackerTrail>(text.text)))
