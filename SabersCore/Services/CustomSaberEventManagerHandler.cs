@@ -41,14 +41,12 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
 
     public void InitializeEventManager(GameObject customSaberObject, SaberType saberType)
     {
-        if (eventManager == null || eventManager.OnLevelStart == null)
-        {
-            return;
-        }
-        
         this.saberType = saberType;
-        eventManager = customSaberObject.GetComponent<EventManager>();
-        if (eventManager == null)
+        if (customSaberObject.TryGetComponent<EventManager>(out var manager))
+        {
+            eventManager = manager;
+        }
+        else
         {
             throw new NullReferenceException(
                 $"Provided object '{customSaberObject.name}' does not have a '{typeof(EventManager)}'.");
@@ -73,7 +71,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
 
         relativeScoreCounter.relativeScoreOrImmediateRankDidChangeEvent += ScoreChangedEvent;
 
-        eventManager.OnLevelStart.Invoke();
+        eventManager.OnLevelStart?.Invoke();
     }
 
     public void Dispose()
