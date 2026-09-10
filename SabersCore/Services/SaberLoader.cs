@@ -61,12 +61,6 @@ internal class SaberLoader
 
             spriteCache.AddSprite(saberFile.Hash, icon);
 
-            #if SHADER_DEBUG
-            await ShaderInfoDump.Instance.RegisterModelShaders(saberPrefab, descriptor.SaberName ?? "Unknown Saber");
-            #else
-            await ShaderRepairUtils.RepairSaberShadersAsync(saberPrefab);
-            #endif
-            
             var saberName = RichTextString.Create(saberDescriptor.SaberName);
             var authorName = RichTextString.Create(saberDescriptor.AuthorName);
             var saberIcon = icon != null ? icon : PluginResources.NullCoverImage;

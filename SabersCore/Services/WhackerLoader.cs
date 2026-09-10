@@ -89,12 +89,6 @@ internal class WhackerLoader
             var icon = await GetDownscaledIcon(archive, whacker);
             spriteCache.AddSprite(saberFile.Hash, icon);
 
-#if SHADER_DEBUG
-            await ShaderInfoDump.Instance.RegisterModelShaders(saberPrefab, whacker.descriptor.objectName ?? "Unknown Whacker");
-#else
-            await ShaderRepairUtils.RepairSaberShadersAsync(saberPrefab);
-#endif
-
             var saberName = RichTextString.Create(whacker.Descriptor.Name);
             var authorName = RichTextString.Create(whacker.Descriptor.Author);
             var saberIcon = icon != null ? icon : PluginResources.NullCoverImage;

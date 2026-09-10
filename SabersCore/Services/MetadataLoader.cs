@@ -116,10 +116,6 @@ internal class MetadataLoader : IAsyncInitializable, IDisposable, ISaberMetadata
         
         UpdateMetadataCache(updatedLocalCache, localSaberFiles, installedSaberHashes);
 
-        #if SHADER_DEBUG
-        ShaderInfoDump.Instance.DumpTo(DirectoryManager.UserData.FullName);
-        #endif
-
         stopwatch.Stop();
         Plugin.Log.Notice($"Cache loading took {stopwatch.ElapsedMilliseconds}ms");
 
