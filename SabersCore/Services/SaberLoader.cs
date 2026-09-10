@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace SabersCore.Services;
 
+[Obsolete(".saber files are no longer supported as of Beat Saber 1.44.2")]
 internal class SaberLoader
 {
     private readonly SpriteCache spriteCache;

@@ -11,6 +11,7 @@ using Object = UnityEngine.Object;
 
 namespace SabersCore.Services;
 
+[Obsolete(".whacker files are no longer supported as of Beat Saber 1.44.2")]
 internal class WhackerLoader
 {
     private readonly SpriteCache spriteCache;

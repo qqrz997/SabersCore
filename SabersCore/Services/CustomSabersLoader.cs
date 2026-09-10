@@ -13,17 +13,11 @@ namespace SabersCore.Services;
 internal class CustomSabersLoader : ISabersLoader
 {
     private readonly IPrefabCache prefabCache;
-    private readonly SaberLoader saberLoader;
-    private readonly WhackerLoader whackerLoader;
 
     public CustomSabersLoader(
-        IPrefabCache prefabCache,
-        SaberLoader saberLoader,
-        WhackerLoader whackerLoader)
+        IPrefabCache prefabCache)
     {
         this.prefabCache = prefabCache;
-        this.saberLoader = saberLoader;
-        this.whackerLoader = whackerLoader;
     }
 
     private readonly Dictionary<SaberFileInfo, Task<ISaberData>> runningTasks = [];
@@ -72,8 +66,8 @@ internal class CustomSabersLoader : ISabersLoader
 
     private async Task<ISaberData> LoadSaberDataAsync(SaberFileInfo saberFile) => saberFile.FileInfo.Extension switch
     {
-        ".saber" => await saberLoader.LoadCustomSaberAsync(saberFile),
-        ".whacker" => await whackerLoader.LoadWhackerAsync(saberFile),
+        // ".saber" => await saberLoader.LoadCustomSaberAsync(saberFile),
+        // ".whacker" => await whackerLoader.LoadWhackerAsync(saberFile),
         _ => new NoSaberData(saberFile, SaberLoaderError.InvalidFileType)
     };
 }
