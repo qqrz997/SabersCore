@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-using CustomSaber;
+using SaberComponents.Components;
 using SabersCore.Utilities.Common;
 using SabersCore.Utilities.Extensions;
 using UnityEngine;

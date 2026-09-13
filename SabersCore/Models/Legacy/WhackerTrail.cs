@@ -6,7 +6,7 @@ namespace SabersCore.Models;
 internal class WhackerTrail
 {
     public int TrailId { get; }
-    public global::CustomSaber.ColorType ColorType { get; }
+    public SaberComponents.Models.ColorType ColorType { get; }
     public Color TrailColor { get; }
     public Color MultiplierColor { get; }
     public int Length { get; }
@@ -14,7 +14,7 @@ internal class WhackerTrail
     [JsonConstructor]
     public WhackerTrail(
         int trailId,
-        global::CustomSaber.ColorType colorType,
+        SaberComponents.Models.ColorType colorType,
         Color trailColor,
         Color multiplierColor,
         int length)

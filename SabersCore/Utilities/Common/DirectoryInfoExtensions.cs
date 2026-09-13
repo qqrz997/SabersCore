@@ -10,6 +10,7 @@ internal static class DirectoryInfoExtensions
     private static string[] SaberFileTypes => [
         // "saber",
         // "whacker"
+        "saber2"
     ];
 
     /// <summary>

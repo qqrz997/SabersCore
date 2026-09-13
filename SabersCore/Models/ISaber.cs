@@ -1,4 +1,4 @@
-﻿using CustomSaber;
+﻿using SaberComponents.Components;
 using UnityEngine;
 
 namespace SabersCore.Models;

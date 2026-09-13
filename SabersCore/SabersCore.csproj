@@ -32,13 +32,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include="Resources\CustomSaber.dll" />
         <EmbeddedResource Include="Resources\defaultsabers-image.jpg" />
         <EmbeddedResource Include="Resources\null-image.png" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\CustomSaber\CustomSaber.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -95,6 +90,10 @@
         <Reference Include="Newtonsoft.Json">
           <Private>false</Private>
           <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Newtonsoft.Json.dll</HintPath>
+        </Reference>
+        <Reference Include="SaberComponents">
+            <HintPath>$(BeatSaberDir)\Libs\SaberComponents.dll</HintPath>
+            <Private>false</Private>
         </Reference>
         <Reference Include="SaberTrail" Publicize="true">
           <Private>false</Private>

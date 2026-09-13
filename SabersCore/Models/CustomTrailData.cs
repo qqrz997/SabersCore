@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using TrailColorType = CustomSaber.ColorType;
+using TrailColorType = SaberComponents.Models.ColorType;
 
 namespace SabersCore.Models;
 

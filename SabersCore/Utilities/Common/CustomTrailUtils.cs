@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using CustomSaber;
+using SaberComponents.Components;
 using Newtonsoft.Json;
 using SabersCore.Models;
 using UnityEngine;
@@ -53,15 +53,15 @@ public static class CustomTrailUtils
     /// <param name="saberObject">The GameObject of the custom saber</param>
     public static ITrailData[] GetTrailsFromCustomSaber(GameObject saberObject) => saberObject
         .GetComponentsInChildren<CustomTrail>()
-        .Where(ct => ct.PointEnd != null && ct.PointStart != null) // is the CustomTrail valid?
+        .Where(ct => ct.pointEnd != null && ct.pointStart != null) // is the CustomTrail valid?
         .Select(trail => new CustomTrailData(
-            material: trail.TrailMaterial,
-            lengthSeconds: ConvertLegacyLength(trail.Length),
+            material: trail.trailMaterial,
+            lengthSeconds: trail.length,
             colorType: trail.colorType,
-            customColor: trail.TrailColor,
-            colorMultiplier: trail.MultiplierColor,
-            trailTopOffset: trail.PointEnd.position - saberObject.transform.position,
-            trailBottomOffset: trail.PointStart.position - saberObject.transform.position))
+            customColor: trail.trailColor,
+            colorMultiplier: trail.multiplierColor,
+            trailTopOffset: trail.pointEnd.position - saberObject.transform.position,
+            trailBottomOffset: trail.pointStart.position - saberObject.transform.position))
         .ToArray<ITrailData>();
     
     /// <summary>
