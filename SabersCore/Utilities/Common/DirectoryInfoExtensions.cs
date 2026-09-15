@@ -6,7 +6,6 @@ namespace SabersCore.Utilities.Common;
 
 internal static class DirectoryInfoExtensions
 {
-    // todo: saber and whacker are obsolete - won't be used in 1.44.2+
     private static string[] SaberFileTypes => [
         // "saber",
         // "whacker"

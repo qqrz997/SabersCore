@@ -21,7 +21,7 @@ internal class Saber2Loader
     }
 
     /// <summary>
-    /// Loads a custom saber from a .whacker file
+    /// Loads a custom saber from a .saber2 file
     /// </summary>
     public async Task<ISaberData> LoadSaber2Async(SaberFileInfo saberFile)
     {
@@ -84,7 +84,7 @@ internal class Saber2Loader
             var authorName = RichTextString.Create(saber2.AuthorName);
             var saberIcon = PluginResources.NullCoverImage;
             var descriptor = new Descriptor(saberName, authorName, saberIcon);
-            var hasTrails = CustomTrailUtils.GetTrailsFromWhacker(saberPrefab).Any();
+            var hasTrails = CustomTrailUtils.GetTrailsFromCustomSaber(saberPrefab).Any();
             var metadata = new CustomSaberMetadata(saberFile, SaberLoaderError.None, descriptor, hasTrails);
             var saber2Prefab = new CustomSaberPrefab(saberPrefab);
             return new CustomSaberData(metadata, saber2Prefab);

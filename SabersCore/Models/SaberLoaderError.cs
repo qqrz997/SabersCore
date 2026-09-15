@@ -8,7 +8,7 @@ public enum SaberLoaderError
     Unknown,
     InvalidFileType,
     FileNotFound,
-    LegacyWhacker,
+    // LegacyWhacker,
     NullBundle,
     NullAsset,
 }

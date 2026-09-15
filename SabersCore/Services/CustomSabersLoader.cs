@@ -68,8 +68,6 @@ internal class CustomSabersLoader : ISabersLoader
 
     private async Task<ISaberData> LoadSaberDataAsync(SaberFileInfo saberFile) => saberFile.FileInfo.Extension switch
     {
-        // ".saber" => await saberLoader.LoadCustomSaberAsync(saberFile),
-        // ".whacker" => await whackerLoader.LoadWhackerAsync(saberFile),
         ".saber2" => await saber2Loader.LoadSaber2Async(saberFile),
         _ => new NoSaberData(saberFile, SaberLoaderError.InvalidFileType)
     };
