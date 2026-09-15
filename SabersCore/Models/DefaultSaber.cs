@@ -12,13 +12,13 @@ public class DefaultSaber : ISaber
     public GameObject GameObject { get; }
     public EventManager? EventManager => null;
     
-    public DefaultSaber(GameObject defaultSaberObject)
+    public DefaultSaber(GameObject defaultSaberObject, SaberType saberType)
     {
         GameObject = defaultSaberObject;
-        defaultSaberColorer = GameObject.AddComponent<DefaultSaberColorer>();
+        defaultSaberColorer = new(defaultSaberObject, saberType);
     }
 
-    public void SetColor(Color color) => defaultSaberColorer.SetColor(color);
+    public void SetColor(ColorScheme colorScheme) => defaultSaberColorer.SetColor(colorScheme);
     public void SetParent(Transform parent)
     {
         GameObject.transform.SetParent(parent, false);

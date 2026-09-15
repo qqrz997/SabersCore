@@ -55,10 +55,10 @@ internal class SaberLoader
             saberPrefab.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             saberPrefab.name += $" {saberDescriptor.SaberName}";
 
-            var icon = saberDescriptor.CoverImage;
-            if (icon != null && icon.texture != null)
+            Sprite? icon = null;
+            if (saberDescriptor.CoverImage != null)
             {
-                icon = icon.texture.DuplicateTexture().Downscale(128, 128).ToSprite(rename: saberDescriptor.SaberName);
+                icon = saberDescriptor.CoverImage.DuplicateTexture().Downscale(128, 128).ToSprite(rename: saberDescriptor.SaberName);
             }
 
             spriteCache.AddSprite(saberFile.Hash, icon);

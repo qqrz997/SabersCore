@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using TrailColorType = SaberComponents.Models.ColorType;
 
 namespace SabersCore.Models;
 
@@ -8,7 +7,7 @@ internal class CustomTrailData : ITrailData
     public CustomTrailData(
         Material? material,
         float lengthSeconds,
-        TrailColorType colorType,
+        bool useTrailColor,
         Color customColor,
         Color colorMultiplier,
         Vector3 trailTopOffset,
@@ -16,7 +15,7 @@ internal class CustomTrailData : ITrailData
     {
         Material = material;
         LengthSeconds = lengthSeconds;
-        UseCustomColor = colorType == TrailColorType.CustomColor;
+        UseTrailColor = useTrailColor;
         CustomColor = customColor;
         ColorMultiplier = colorMultiplier;
         TrailTopOffset = trailTopOffset;
@@ -26,7 +25,7 @@ internal class CustomTrailData : ITrailData
     public CustomTrailData(
         Material? material,
         float lengthSeconds,
-        TrailColorType colorType,
+        bool useTrailColor,
         Color customColor,
         Color colorMultiplier,
         GameObject saberObjectRoot,
@@ -35,7 +34,7 @@ internal class CustomTrailData : ITrailData
     {
         Material = material;
         LengthSeconds = lengthSeconds;
-        UseCustomColor = colorType == TrailColorType.CustomColor;
+        UseTrailColor = useTrailColor;
         CustomColor = customColor;
         ColorMultiplier = colorMultiplier;
         TrailTopOffset = trailTop.position - saberObjectRoot.transform.position;
@@ -44,7 +43,7 @@ internal class CustomTrailData : ITrailData
 
     public Material? Material { get; }
     public float LengthSeconds { get; }
-    public bool UseCustomColor { get; }
+    public bool UseTrailColor { get; }
     public Color CustomColor { get; }
     public Color ColorMultiplier { get; }
     public Vector3 TrailTopOffset { get; }

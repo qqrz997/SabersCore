@@ -10,7 +10,7 @@ public interface ITrailData
     public Material? Material { get; }
     public float LengthSeconds { get; }
     
-    public bool UseCustomColor { get; }
+    public bool UseTrailColor { get; }
     public Color CustomColor { get; }
     public Color ColorMultiplier { get; }
 

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using SaberComponents.Components;
-using SabersCore.Utilities.Common;
+﻿using SaberComponents.Components;
 using SabersCore.Utilities.Extensions;
 using UnityEngine;
 
@@ -11,7 +9,8 @@ namespace SabersCore.Models;
 /// </summary>
 internal class CustomSaber : ISaber
 {
-    private readonly Material[] colorableMaterials;
+    // private readonly Material[] colorableMaterials;
+    private readonly MaterialColorer[] colorers;
 
     public bool InUse { get; set; }
     public GameObject GameObject { get; }
@@ -22,14 +21,17 @@ internal class CustomSaber : ISaber
         GameObject = gameObject;
         GameObject.SetLayerRecursively(12);
         EventManager = gameObject.TryGetComponentOrAdd<EventManager>();
-        colorableMaterials = CustomTrailUtils.GetColorableSaberMaterials(gameObject).ToArray();
+        // colorableMaterials = CustomTrailUtils.GetColorableSaberMaterials(gameObject).ToArray();
+        colorers = gameObject.GetComponentsInChildren<MaterialColorer>() ?? [];
     }
 
-    public void SetColor(Color color)
+    public void SetColor(ColorScheme colorScheme)
     {
-        foreach (var colorableMaterial in colorableMaterials)
+        foreach (var colorer in colorers)
         {
-            colorableMaterial.SetColor(MaterialProperties.Color, color);
+            colorer.materialPropertyBlock ??= new();
+            colorer.materialPropertyBlock.SetColor(colorer.propertyName, colorScheme.GetColorByType(colorer.colorSchemeType) * colorer.multiplierColor);
+            colorer.meshRenderer.SetPropertyBlock(colorer.materialPropertyBlock);
         }
     }
 

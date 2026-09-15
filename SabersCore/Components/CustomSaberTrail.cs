@@ -35,7 +35,7 @@ public class CustomSaberTrail : SaberTrail
     
     public void SetColor(Color color)
     {
-        _color = (trailData.UseCustomColor ? trailData.CustomColor : color) * trailData.ColorMultiplier;
+        _color = (trailData.UseTrailColor ? trailData.CustomColor : color) * trailData.ColorMultiplier;
         
         foreach (var trailMaterial in _trailRenderer._meshRenderer.materials)
         {

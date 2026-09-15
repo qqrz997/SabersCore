@@ -53,8 +53,8 @@ internal class SaberInstanceFactory : ISaberInstanceFactory
     }
 
     private SaberInstanceSet CreateNewDefaultSaberSet() =>
-        new(new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber()),
-            new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber()),
+        new(new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber(), SaberType.SaberA),
+            new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber(), SaberType.SaberB),
             [trailFactory.CreateDefaultTrailData()],
             [trailFactory.CreateDefaultTrailData()]);
 

@@ -12,7 +12,7 @@ public class DefaultTrailData : ITrailData
     
     public Material? Material { get; }
     public float LengthSeconds => TrailUtils.DefaultDuration;
-    public bool UseCustomColor => false;
+    public bool UseTrailColor => false;
     public Color CustomColor => Color.white;
     public Color ColorMultiplier => Color.white; 
     public Vector3 TrailTopOffset => Vector3.forward;

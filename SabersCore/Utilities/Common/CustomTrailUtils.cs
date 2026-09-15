@@ -53,15 +53,15 @@ public static class CustomTrailUtils
     /// <param name="saberObject">The GameObject of the custom saber</param>
     public static ITrailData[] GetTrailsFromCustomSaber(GameObject saberObject) => saberObject
         .GetComponentsInChildren<CustomTrail>()
-        .Where(ct => ct.pointEnd != null && ct.pointStart != null) // is the CustomTrail valid?
+        .Where(ct => ct.top != null && ct.bottom != null) // is the CustomTrail valid?
         .Select(trail => new CustomTrailData(
-            material: trail.trailMaterial,
+            material: trail.material,
             lengthSeconds: trail.length,
-            colorType: trail.colorType,
+            useTrailColor: trail.useTrailColor,
             customColor: trail.trailColor,
             colorMultiplier: trail.multiplierColor,
-            trailTopOffset: trail.pointEnd.position - saberObject.transform.position,
-            trailBottomOffset: trail.pointStart.position - saberObject.transform.position))
+            trailTopOffset: trail.top.position - saberObject.transform.position,
+            trailBottomOffset: trail.bottom.position - saberObject.transform.position))
         .ToArray<ITrailData>();
     
     /// <summary>
@@ -90,7 +90,7 @@ public static class CustomTrailUtils
             .Select(trail => new CustomTrailData(
                 material: trail.Material,
                 lengthSeconds: ConvertLegacyLength(trail.Data!.Length),
-                colorType: trail.Data!.ColorType,
+                useTrailColor: false,
                 customColor: trail.Data.TrailColor,
                 colorMultiplier: trail.Data.MultiplierColor,
                 saberObjectRoot: saberObject,
