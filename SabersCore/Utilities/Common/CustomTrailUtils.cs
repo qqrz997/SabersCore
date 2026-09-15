@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using SaberComponents.Components;
-using Newtonsoft.Json;
 using SabersCore.Models;
 using UnityEngine;
-using UnityEngine.UI;
-using static SabersCore.Utilities.Common.TrailUtils;
 
 namespace SabersCore.Utilities.Common;
 
