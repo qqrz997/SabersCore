@@ -66,5 +66,6 @@ internal class TrailFactory : ITrailFactory
         return trail;
     }
 
-    public DefaultTrailData CreateDefaultTrailData() => new(gameResourcesProvider.DefaultTrailMaterial);
+    public DefaultTrailData CreateDefaultTrailData(SaberType saberType) => 
+        new(gameResourcesProvider.DefaultTrailMaterial, saberType);
 }

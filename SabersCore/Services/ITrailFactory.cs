@@ -14,5 +14,5 @@ public interface ITrailFactory
     /// <returns>An array containing the new trail instances. Returns an empty array if none are created.</returns>
     CustomSaberTrail[] AddTrailsTo(ISaber saber, ITrailData[] trails, float intensity);
 
-    DefaultTrailData CreateDefaultTrailData();
+    DefaultTrailData CreateDefaultTrailData(SaberType saberType);
 }

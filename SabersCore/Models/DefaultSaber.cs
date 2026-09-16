@@ -1,4 +1,5 @@
 ﻿using SaberComponents.Components;
+using SaberComponents.Models;
 using SabersCore.Components;
 using UnityEngine;
 
@@ -18,7 +19,16 @@ public class DefaultSaber : ISaber
         defaultSaberColorer = new(defaultSaberObject, saberType);
     }
 
-    public void SetColor(ColorScheme colorScheme) => defaultSaberColorer.SetColor(colorScheme);
+    public void SetColor(ColorScheme colorScheme) =>
+        defaultSaberColorer.SetColor(colorScheme);
+
+    public void SetColor(Color color, SaberType saberType)
+    {
+        defaultSaberColorer.SetColor(color, saberType);
+    }
+    
+    public void UpdateBoostColors(ColorScheme colorScheme, bool isBoostOn) { }
+
     public void SetParent(Transform parent)
     {
         GameObject.transform.SetParent(parent, false);

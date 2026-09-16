@@ -1,4 +1,5 @@
-﻿using SabersCore.Utilities.Extensions;
+﻿using SaberComponents.Models;
+using SabersCore.Utilities.Extensions;
 using UnityEngine;
 
 namespace SabersCore.Components;
@@ -18,8 +19,16 @@ internal class DefaultSaberColorer
     
     public void SetColor(ColorScheme colorScheme)
     {
-        var color = saberType == SaberType.SaberA ? colorScheme.saberAColor :  colorScheme.saberBColor;
-        
+        SetColor(saberType == SaberType.SaberA ? colorScheme.saberAColor :  colorScheme.saberBColor);
+    }
+
+    public void SetColor(Color color, SaberType saberType)
+    {
+        SetColor(color);
+    }
+
+    private void SetColor(Color color)
+    {
         foreach (var setSaberGlowColor in setSaberGlowColors)
         {
             setSaberGlowColor.SetNewColor(color);

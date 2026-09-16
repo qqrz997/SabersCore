@@ -18,6 +18,8 @@ public static class CustomTrailUtils
         .Select(trail => new CustomTrailData(
             material: trail.material,
             lengthSeconds: trail.length,
+            colorSchemeType: trail.colorSchemeType,
+            useColorBoostEvents: trail.useColorBoostEvents,
             useTrailColor: trail.useTrailColor,
             customColor: trail.trailColor,
             colorMultiplier: trail.multiplierColor,
