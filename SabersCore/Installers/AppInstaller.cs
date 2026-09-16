@@ -21,8 +21,7 @@ internal class AppInstaller : Installer
         Container.BindInterfacesAndSelfTo<DirectoryManager>().AsSingle();
         Container.Bind<SaberMetadataCacheMigrationManager>().AsSingle();
         Container.Bind<SaberMetadataConverter>().AsSingle();
-        Container.Bind<WhackerLoader>().AsSingle();
+        Container.Bind<Saber2Loader>().AsSingle();
         Container.Bind<SpriteCache>().AsSingle();
-        Container.Bind<SaberLoader>().AsSingle();
     }
 }

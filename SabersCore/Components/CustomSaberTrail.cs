@@ -1,4 +1,5 @@
-﻿using SabersCore.Models;
+﻿using SaberComponents.Models;
+using SabersCore.Models;
 using SabersCore.Utilities.Common;
 using SabersCore.Utilities.Extensions;
 using UnityEngine;
@@ -32,15 +33,38 @@ public class CustomSaberTrail : SaberTrail
     public bool UseWidthOverride { private get; set; }
     
     public ITrailData TrailData => trailData;
-    
-    public void SetColor(Color color)
+
+    public void SetColor(ColorScheme colorScheme)
     {
-        _color = (trailData.UseCustomColor ? trailData.CustomColor : color) * trailData.ColorMultiplier;
-        
-        foreach (var trailMaterial in _trailRenderer._meshRenderer.materials)
+        if (trailData.UseTrailColor)
         {
-            trailMaterial.SetColor(MaterialProperties.Color, _color);
+            SetColor(trailData.CustomColor);
+            return;
         }
+        var color = colorScheme.GetColorByType(trailData.ColorSchemeType);
+        SetColor(color);
+    }
+    
+    public void UpdateBoostColors(ColorScheme colorScheme, bool isBoostOn)
+    {
+        var color = colorScheme.GetBoostColorByType(trailData.ColorSchemeType, isBoostOn);
+        SetColor(color);
+    }
+
+    public void SetColor(Color color, SaberType saberType)
+    {
+        if ((saberType == SaberType.SaberA && trailData.ColorSchemeType == ColorSchemeType.LeftSaber)
+            || (saberType == SaberType.SaberB && trailData.ColorSchemeType == ColorSchemeType.RightSaber))
+        {
+            SetColor(color);
+        }
+    }
+    
+    private void SetColor(Color color)
+    {
+        _color = color * trailData.ColorMultiplier;
+        foreach (var trailMaterial in _trailRenderer._meshRenderer.materials)
+            trailMaterial.SetColor(MaterialProperties.Color, _color);
     }
     
     private new void Start()

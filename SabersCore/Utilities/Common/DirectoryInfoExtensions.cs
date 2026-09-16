@@ -6,7 +6,11 @@ namespace SabersCore.Utilities.Common;
 
 internal static class DirectoryInfoExtensions
 {
-    private static string[] SaberFileTypes => ["saber", "whacker"];
+    private static string[] SaberFileTypes => [
+        // "saber",
+        // "whacker"
+        "saber2"
+    ];
 
     /// <summary>
     /// Enumerates supported saber file types in a directory

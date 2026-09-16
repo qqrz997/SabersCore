@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using SaberComponents.Components;
 using SabersCore.Models;
 using SabersCore.Utilities.Common;
 using SabersCore.Utilities.Extensions;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace SabersCore.Services;
 
+[Obsolete(".saber files are no longer supported as of Beat Saber 1.44.2")]
 internal class SaberLoader
 {
     private readonly SpriteCache spriteCache;
@@ -53,20 +55,14 @@ internal class SaberLoader
             saberPrefab.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             saberPrefab.name += $" {saberDescriptor.SaberName}";
 
-            var icon = saberDescriptor.CoverImage;
-            if (icon != null && icon.texture != null)
+            Sprite? icon = null;
+            if (saberDescriptor.CoverImage != null)
             {
-                icon = icon.texture.DuplicateTexture().Downscale(128, 128).ToSprite(rename: saberDescriptor.SaberName);
+                icon = saberDescriptor.CoverImage.DuplicateTexture().Downscale(128, 128).ToSprite(rename: saberDescriptor.SaberName);
             }
 
             spriteCache.AddSprite(saberFile.Hash, icon);
 
-            #if SHADER_DEBUG
-            await ShaderInfoDump.Instance.RegisterModelShaders(saberPrefab, descriptor.SaberName ?? "Unknown Saber");
-            #else
-            await ShaderRepairUtils.RepairSaberShadersAsync(saberPrefab);
-            #endif
-            
             var saberName = RichTextString.Create(saberDescriptor.SaberName);
             var authorName = RichTextString.Create(saberDescriptor.AuthorName);
             var saberIcon = icon != null ? icon : PluginResources.NullCoverImage;

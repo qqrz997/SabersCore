@@ -53,14 +53,12 @@ internal class SaberInstanceFactory : ISaberInstanceFactory
     }
 
     private SaberInstanceSet CreateNewDefaultSaberSet() =>
-        new(new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber()),
-            new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber()),
-            [trailFactory.CreateDefaultTrailData()],
-            [trailFactory.CreateDefaultTrailData()]);
+        new(new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber(), SaberType.SaberA),
+            new DefaultSaber(gameResourcesProvider.CreateNewDefaultSaber(), SaberType.SaberB),
+            [trailFactory.CreateDefaultTrailData(SaberType.SaberA)],
+            [trailFactory.CreateDefaultTrailData(SaberType.SaberB)]);
 
-    private SaberInstanceSet WithDefaultTrails(SaberInstanceSet saberInstance)
-    {
-        var defaultTrail = new ITrailData[] { trailFactory.CreateDefaultTrailData() };
-        return saberInstance.WithTrails(defaultTrail, defaultTrail);
-    }
+    private SaberInstanceSet WithDefaultTrails(SaberInstanceSet saberInstance) => saberInstance.WithTrails(
+            [trailFactory.CreateDefaultTrailData(SaberType.SaberA)],
+            [trailFactory.CreateDefaultTrailData(SaberType.SaberB)]);
 }

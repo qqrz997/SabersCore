@@ -11,19 +11,19 @@ using Object = UnityEngine.Object;
 
 namespace SabersCore.Services;
 
-internal class WhackerLoader
+internal class Saber2Loader
 {
     private readonly SpriteCache spriteCache;
 
-    public WhackerLoader(SpriteCache spriteCache)
+    public Saber2Loader(SpriteCache spriteCache)
     {
         this.spriteCache = spriteCache;
     }
 
     /// <summary>
-    /// Loads a custom saber from a .whacker file
+    /// Loads a custom saber from a .saber2 file
     /// </summary>
-    public async Task<ISaberData> LoadWhackerAsync(SaberFileInfo saberFile)
+    public async Task<ISaberData> LoadSaber2Async(SaberFileInfo saberFile)
     {
         AssetBundle? bundle = null;
         GameObject? saberPrefab = null;
@@ -35,12 +35,12 @@ internal class WhackerLoader
                 return new NoSaberData(saberFile, SaberLoaderError.FileNotFound);
             }
 
-            Plugin.Log.Debug($"Attempting to load whacker file - {saberFile.FileInfo.Name}");
+            Plugin.Log.Debug($"Attempting to load saber2 file - {saberFile.FileInfo.Name}");
 
             await using var fileStream = saberFile.FileInfo.OpenRead();
             using var archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 
-            var jsonEntry = archive.Entries.FirstOrDefault(x => x.FullName.EndsWith(".json"));
+            var jsonEntry = archive.GetEntry("metadata.json");
 
             if (jsonEntry is null)
             {
@@ -48,20 +48,13 @@ internal class WhackerLoader
             }
 
             await using var jsonStream = jsonEntry.Open();
-            var whacker = jsonStream.DeserializeStream<WhackerModel>();
-            
-            if (whacker is null)
+            var saber2 = jsonStream.DeserializeStream<Saber2Model>();
+            if (saber2 is null || !saber2.Assets.TryGetValue(AssetPlatform.PC, out var assetMetadata))
             {
-                return new NoSaberData(saberFile, SaberLoaderError.InvalidFileType);
+                return new NoSaberData(saberFile, SaberLoaderError.FileNotFound);
             }
 
-            if (whacker.Config.IsLegacy)
-            {
-                return new NoSaberData(saberFile, SaberLoaderError.LegacyWhacker);
-            }
-
-            var bundleEntry = archive.GetEntry(whacker.FileName);
-
+            var bundleEntry = archive.GetEntry(assetMetadata.FilePath);
             if (bundleEntry is null)
             {
                 return new NoSaberData(saberFile, SaberLoaderError.FileNotFound);
@@ -69,14 +62,12 @@ internal class WhackerLoader
 
             await using var bundleStream = bundleEntry.Open();
             bundle = await BundleLoading.LoadBundle(bundleStream);
-
             if (bundle == null)
             {
                 return new NoSaberData(saberFile, SaberLoaderError.NullBundle);
             }
 
-            saberPrefab = await BundleLoading.LoadAsset<GameObject>(bundle, "_Whacker");
-
+            saberPrefab = await BundleLoading.LoadAsset<GameObject>(bundle, "_CustomSaber");
             if (saberPrefab == null)
             {
                 bundle.Unload(true);
@@ -84,31 +75,25 @@ internal class WhackerLoader
             }
 
             saberPrefab.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            saberPrefab.name += $" {whacker.Descriptor.Name}";
+            saberPrefab.name += $" {saber2.ModelName}";
 
-            var icon = await GetDownscaledIcon(archive, whacker);
+            var icon = await GetDownscaledIcon(archive, saber2);
             spriteCache.AddSprite(saberFile.Hash, icon);
 
-#if SHADER_DEBUG
-            await ShaderInfoDump.Instance.RegisterModelShaders(saberPrefab, whacker.descriptor.objectName ?? "Unknown Whacker");
-#else
-            await ShaderRepairUtils.RepairSaberShadersAsync(saberPrefab);
-#endif
-
-            var saberName = RichTextString.Create(whacker.Descriptor.Name);
-            var authorName = RichTextString.Create(whacker.Descriptor.Author);
-            var saberIcon = icon != null ? icon : PluginResources.NullCoverImage;
+            var saberName = RichTextString.Create(saber2.ModelName);
+            var authorName = RichTextString.Create(saber2.AuthorName);
+            var saberIcon = PluginResources.NullCoverImage;
             var descriptor = new Descriptor(saberName, authorName, saberIcon);
-            var hasTrails = CustomTrailUtils.GetTrailsFromWhacker(saberPrefab).Any();
+            var hasTrails = CustomTrailUtils.GetTrailsFromCustomSaber(saberPrefab).Any();
             var metadata = new CustomSaberMetadata(saberFile, SaberLoaderError.None, descriptor, hasTrails);
-            var whackerPrefab = new WhackerPrefab(saberPrefab);
-            return new CustomSaberData(metadata, whackerPrefab);
+            var saber2Prefab = new CustomSaberPrefab(saberPrefab);
+            return new CustomSaberData(metadata, saber2Prefab);
         }
         catch (Exception ex)
         {
             if (bundle != null) bundle.Unload(true);
             Plugin.Log.Error($"Encountered a problem while trying to load file - {saberFile.FileInfo.Name}\n{ex}");
-            throw;
+            return new NoSaberData(saberFile, SaberLoaderError.Unknown);
         }
         finally
         {
@@ -117,12 +102,11 @@ internal class WhackerLoader
         }
     }
 
-    private static async Task<Sprite?> GetDownscaledIcon(ZipArchive archive, WhackerModel whacker)
+    private static async Task<Sprite?> GetDownscaledIcon(ZipArchive archive, Saber2Model saber2)
     {
-        if (whacker.Descriptor.IconFileName is null) return null;
-
-        var iconEntry = archive.GetEntry(whacker.Descriptor.IconFileName);
-
+        if (string.IsNullOrEmpty(saber2.IconPath)) return null;
+        
+        var iconEntry = archive.GetEntry(saber2.IconPath);
         if (iconEntry is null) return null;
 
         using var memoryStream = new MemoryStream();
@@ -140,7 +124,7 @@ internal class WhackerLoader
             Object.Destroy(icon);
             return null;
         }
-        var downscaledIcon = icon.texture.Downscale(128, 128).ToSprite(rename: whacker.Descriptor.Name);
+        var downscaledIcon = icon.texture.Downscale(128, 128).ToSprite(rename: saber2.ModelName);
         Object.Destroy(icon);
         return downscaledIcon;
     }
