@@ -9,7 +9,6 @@ public class DefaultSaber : ISaber
 {
     private readonly DefaultSaberColorer defaultSaberColorer;
 
-    public bool InUse { get; set; }
     public GameObject GameObject { get; }
     public EventManager? EventManager => null;
     

@@ -16,7 +16,6 @@ internal class CustomSaber : ISaber
     private readonly MaterialColorer[] saberColors;
     private readonly MaterialColorer[] boostColors;
 
-    public bool InUse { get; set; }
     public GameObject GameObject { get; }
     public EventManager EventManager { get; }
 
