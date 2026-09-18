@@ -12,7 +12,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
     private readonly GameEnergyCounter gameEnergyCounter;
     private readonly ObstacleSaberSparkleEffectManager obstacleCollisionManager;
     private readonly RelativeScoreAndImmediateRankCounter relativeScoreCounter;
-    private readonly PlayerHeadAndObstacleInteraction playerHeadAndObstacleInteraction;
+    private readonly BeatmapCallbacksController beatmapCallbacksController;
     private readonly IScoreController scoreController;
     private readonly IComboController comboController;
     private readonly IReadonlyBeatmapData beatmapData;
@@ -22,7 +22,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         GameEnergyCounter gameEnergyCounter,
         ObstacleSaberSparkleEffectManager obstacleCollisionManager,
         RelativeScoreAndImmediateRankCounter relativeScoreCounter,
-        PlayerHeadAndObstacleInteraction playerHeadAndObstacleInteraction,
+        BeatmapCallbacksController beatmapCallbacksController,
         IScoreController scoreController,
         IComboController comboController,
         IReadonlyBeatmapData beatmapData)
@@ -31,7 +31,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         this.gameEnergyCounter = gameEnergyCounter;
         this.obstacleCollisionManager = obstacleCollisionManager;
         this.relativeScoreCounter = relativeScoreCounter;
-        this.playerHeadAndObstacleInteraction = playerHeadAndObstacleInteraction;
+        this.beatmapCallbacksController = beatmapCallbacksController;
         this.scoreController = scoreController;
         this.comboController = comboController;
         this.beatmapData = beatmapData;
@@ -41,6 +41,8 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
     private float? lastNoteTime;
     private float previousScore;
     private int previousCombo;
+    private int numberOfInteractingArcs;
+    private bool colorBoostIsOn;
     private SaberType saberType;
 
     public void InitializeEventManager(GameObject customSaberObject, SaberType saberType)
@@ -54,11 +56,14 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         scoreController.multiplierDidChangeEvent += MultiplierChanged;
         beatmapObjectManager.noteWasCutEvent += NoteWasCut;
         beatmapObjectManager.noteWasMissedEvent += NoteWasMissed;
+        beatmapObjectManager.sliderWasSpawnedEvent += SliderSpawned;
+        beatmapObjectManager.sliderWasDespawnedEvent += SliderDespawned;
         comboController.comboDidChangeEvent += ComboChanged;
         obstacleCollisionManager.sparkleEffectDidStartEvent += SaberStartedCollision;
         obstacleCollisionManager.sparkleEffectDidEndEvent += SaberEndedCollision;
         gameEnergyCounter.gameEnergyDidReach0Event += LevelWasFailed;
         relativeScoreCounter.relativeScoreOrImmediateRankDidChangeEvent += ScoreChangedEvent;
+        beatmapCallbacksController.AddBeatmapCallback<ColorBoostBeatmapEventData>(OnColorBoostEvent);
 
         eventManager.levelStarted?.Invoke();
     }
@@ -68,6 +73,8 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         scoreController.multiplierDidChangeEvent -= MultiplierChanged;
         beatmapObjectManager.noteWasCutEvent -= NoteWasCut;
         beatmapObjectManager.noteWasMissedEvent -= NoteWasMissed;
+        beatmapObjectManager.sliderWasSpawnedEvent -= SliderSpawned;
+        beatmapObjectManager.sliderWasDespawnedEvent -= SliderDespawned;
         comboController.comboDidChangeEvent -= ComboChanged;
         obstacleCollisionManager.sparkleEffectDidStartEvent -= SaberStartedCollision;
         obstacleCollisionManager.sparkleEffectDidEndEvent -= SaberEndedCollision;
@@ -85,7 +92,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         if (lastNoteTime != null && noteController.noteData.time.Approximately(lastNoteTime.Value))
         {
             lastNoteTime = 0;
-            eventManager!.onLevelEnded?.Invoke();
+            eventManager!.levelEnded?.Invoke();
         }
     }
 
@@ -94,7 +101,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         if (lastNoteTime != null && noteController.noteData.time.Approximately(lastNoteTime.Value))
         {
             lastNoteTime = 0;
-            eventManager!.onLevelEnded?.Invoke();
+            eventManager!.levelEnded?.Invoke();
         }
     }
 
@@ -139,6 +146,45 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
             eventManager!.accuracyChanged?.Invoke(relativeScore);
             previousScore = relativeScore;
         }
+    }
+    
+    private void SliderSpawned(SliderController slider)
+    {
+        if (slider._saber.saberType != saberType) return;
+        slider._sliderMovement.headDidMovePastCutMarkEvent += SliderHeadMovedPastCutMark;
+        slider._sliderMovement.tailDidMovePastCutMarkEvent += SliderTailMovedPastCutMark;
+    }
+
+    private void SliderDespawned(SliderController slider)
+    {
+        if (slider._saber.saberType != saberType) return;
+        slider._sliderMovement.headDidMovePastCutMarkEvent -= SliderHeadMovedPastCutMark;
+        slider._sliderMovement.tailDidMovePastCutMarkEvent -= SliderTailMovedPastCutMark;
+    }
+    
+    private void SliderHeadMovedPastCutMark()
+    {
+        if (numberOfInteractingArcs == 0)
+        {
+            eventManager!.arcStoppedInteracting?.Invoke();
+        }
+        numberOfInteractingArcs++;
+    }
+
+    private void SliderTailMovedPastCutMark()
+    {
+        numberOfInteractingArcs--;
+        if (numberOfInteractingArcs == 0)
+        {
+            eventManager!.arcStoppedInteracting?.Invoke();
+        }
+    }
+    
+    private void OnColorBoostEvent(ColorBoostBeatmapEventData eventData)
+    {
+        if (colorBoostIsOn == eventData.boostColorsAreOn) return;
+        colorBoostIsOn = eventData.boostColorsAreOn;
+        eventManager!.boostColorsToggled?.Invoke(colorBoostIsOn);
     }
 
     private static float GetLastNoteTime(IReadonlyBeatmapData beatmapData) => beatmapData
