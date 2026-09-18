@@ -12,6 +12,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
     private readonly GameEnergyCounter gameEnergyCounter;
     private readonly ObstacleSaberSparkleEffectManager obstacleCollisionManager;
     private readonly RelativeScoreAndImmediateRankCounter relativeScoreCounter;
+    private readonly PlayerHeadAndObstacleInteraction playerHeadAndObstacleInteraction;
     private readonly IScoreController scoreController;
     private readonly IComboController comboController;
     private readonly IReadonlyBeatmapData beatmapData;
@@ -21,6 +22,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         GameEnergyCounter gameEnergyCounter,
         ObstacleSaberSparkleEffectManager obstacleCollisionManager,
         RelativeScoreAndImmediateRankCounter relativeScoreCounter,
+        PlayerHeadAndObstacleInteraction playerHeadAndObstacleInteraction,
         IScoreController scoreController,
         IComboController comboController,
         IReadonlyBeatmapData beatmapData)
@@ -29,6 +31,7 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
         this.gameEnergyCounter = gameEnergyCounter;
         this.obstacleCollisionManager = obstacleCollisionManager;
         this.relativeScoreCounter = relativeScoreCounter;
+        this.playerHeadAndObstacleInteraction = playerHeadAndObstacleInteraction;
         this.scoreController = scoreController;
         this.comboController = comboController;
         this.beatmapData = beatmapData;
@@ -37,137 +40,103 @@ public class CustomSaberEventManagerHandler : ICustomSaberEventManagerHandler, I
     private EventManager? eventManager;
     private float? lastNoteTime;
     private float previousScore;
+    private int previousCombo;
     private SaberType saberType;
 
     public void InitializeEventManager(GameObject customSaberObject, SaberType saberType)
     {
-        if (eventManager == null || eventManager.OnLevelStart == null)
-        {
-            return;
-        }
+        eventManager = customSaberObject.GetComponent<EventManager>();
+        if (eventManager == null) return;
         
         this.saberType = saberType;
-        eventManager = customSaberObject.GetComponent<EventManager>();
-        if (eventManager == null)
-        {
-            throw new NullReferenceException(
-                $"Provided object '{customSaberObject.name}' does not have a '{typeof(EventManager)}'.");
-        }
-        
         lastNoteTime = GetLastNoteTime(beatmapData);
-
+        
         scoreController.multiplierDidChangeEvent += MultiplierChanged;
-
         beatmapObjectManager.noteWasCutEvent += NoteWasCut;
         beatmapObjectManager.noteWasMissedEvent += NoteWasMissed;
-
         comboController.comboDidChangeEvent += ComboChanged;
-
-        if (obstacleCollisionManager)
-        {
-            obstacleCollisionManager.sparkleEffectDidStartEvent += SaberStartedCollision;
-            obstacleCollisionManager.sparkleEffectDidEndEvent += SaberEndedCollision;
-        }
-
+        obstacleCollisionManager.sparkleEffectDidStartEvent += SaberStartedCollision;
+        obstacleCollisionManager.sparkleEffectDidEndEvent += SaberEndedCollision;
         gameEnergyCounter.gameEnergyDidReach0Event += LevelWasFailed;
-
         relativeScoreCounter.relativeScoreOrImmediateRankDidChangeEvent += ScoreChangedEvent;
 
-        eventManager.OnLevelStart.Invoke();
+        eventManager.levelStarted?.Invoke();
     }
 
     public void Dispose()
     {
+        scoreController.multiplierDidChangeEvent -= MultiplierChanged;
         beatmapObjectManager.noteWasCutEvent -= NoteWasCut;
         beatmapObjectManager.noteWasMissedEvent -= NoteWasMissed;
-
-        scoreController.multiplierDidChangeEvent -= MultiplierChanged;
-
         comboController.comboDidChangeEvent -= ComboChanged;
-
-        if (obstacleCollisionManager)
-        {
-            obstacleCollisionManager.sparkleEffectDidStartEvent -= SaberStartedCollision;
-            obstacleCollisionManager.sparkleEffectDidEndEvent -= SaberEndedCollision;
-        }
-
+        obstacleCollisionManager.sparkleEffectDidStartEvent -= SaberStartedCollision;
+        obstacleCollisionManager.sparkleEffectDidEndEvent -= SaberEndedCollision;
         gameEnergyCounter.gameEnergyDidReach0Event -= LevelWasFailed;
-
         relativeScoreCounter.relativeScoreOrImmediateRankDidChangeEvent -= ScoreChangedEvent;
     }
 
     private void NoteWasCut(NoteController noteController, in NoteCutInfo noteCutInfo)
     {
-        if (lastNoteTime == null || eventManager == null) return;
-
-        if (!noteCutInfo.allIsOK)
+        if (noteCutInfo.allIsOK && noteCutInfo.saberType == saberType)
         {
-            // Player has skill issue
-            eventManager.OnComboBreak?.Invoke();
-        }
-        else if (noteCutInfo.saberType == saberType)
-        {
-            // Note was cut
-            eventManager.OnSlice?.Invoke();
+            eventManager!.noteCut?.Invoke();
         }
 
-        if (noteController.noteData.time.Approximately(lastNoteTime.Value))
+        if (lastNoteTime != null && noteController.noteData.time.Approximately(lastNoteTime.Value))
         {
             lastNoteTime = 0;
-            eventManager.OnLevelEnded?.Invoke();
+            eventManager!.onLevelEnded?.Invoke();
         }
     }
 
     private void NoteWasMissed(NoteController noteController)
     {
-        if (lastNoteTime == null || eventManager == null) return;
-
-        if (noteController.noteData.colorType != ColorType.None)
-        {
-            eventManager.OnComboBreak?.Invoke();
-        }
-
-        if (noteController.noteData.time.Approximately(lastNoteTime.Value))
+        if (lastNoteTime != null && noteController.noteData.time.Approximately(lastNoteTime.Value))
         {
             lastNoteTime = 0;
-            eventManager.OnLevelEnded?.Invoke();
+            eventManager!.onLevelEnded?.Invoke();
         }
     }
 
     private void MultiplierChanged(int multiplier, float progress)
     {
-        if (eventManager != null && multiplier > 1 && progress < 0.1f)
+        if (multiplier > 1 && progress < 0.1f)
         {
-            eventManager.MultiplierUp?.Invoke();
+            eventManager!.multiplierUp?.Invoke();
         }
     }
 
     private void ComboChanged(int combo)
     {
-        if (eventManager != null) eventManager.OnComboChanged?.Invoke(combo);
+        eventManager!.comboChanged?.Invoke(combo);
+        if (combo < previousCombo)
+        {
+            eventManager.comboBroken?.Invoke();
+        }
+        previousCombo = combo;
     }
 
     private void SaberStartedCollision(SaberType saberType)
     {
-        if (eventManager != null) eventManager.SaberStartColliding?.Invoke();
+        eventManager!.saberStartColliding?.Invoke();
     }
 
     private void SaberEndedCollision(SaberType saberType)
     {
-        if (eventManager != null) eventManager.SaberStopColliding?.Invoke();
+        eventManager!.saberStopColliding?.Invoke();
     }
 
     private void LevelWasFailed()
     {
-        if (eventManager != null) eventManager.OnLevelFail?.Invoke();
+        eventManager!.levelFailed?.Invoke();
     }
 
     private void ScoreChangedEvent()
     {
-        float relativeScore = relativeScoreCounter.relativeScore;
+        var relativeScore = relativeScoreCounter.relativeScore;
         if (Math.Abs(previousScore - relativeScore) > 0f)
         {
-            if (eventManager != null) eventManager.OnAccuracyChanged?.Invoke(relativeScore);
+            eventManager!.accuracyChanged?.Invoke(relativeScore);
             previousScore = relativeScore;
         }
     }
