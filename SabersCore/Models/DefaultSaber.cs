@@ -1,5 +1,4 @@
-﻿using SaberComponents.Components;
-using SaberComponents.Models;
+﻿using AssetComponents.Components.Sabers;
 using SabersCore.Components;
 using UnityEngine;
 

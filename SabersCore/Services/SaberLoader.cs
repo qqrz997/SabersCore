@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using SaberComponents.Components;
+using AssetComponents.Components.Sabers;
 using SabersCore.Models;
 using SabersCore.Utilities.Common;
 using SabersCore.Utilities.Extensions;
@@ -53,18 +53,18 @@ internal class SaberLoader
 
             var saberDescriptor = saberPrefab.GetComponent<SaberDescriptor>();
             saberPrefab.hideFlags |= HideFlags.DontUnloadUnusedAsset;
-            saberPrefab.name += $" {saberDescriptor.SaberName}";
+            saberPrefab.name += $" {saberDescriptor.saberName}";
 
             Sprite? icon = null;
-            if (saberDescriptor.CoverImage != null)
+            if (saberDescriptor.coverImage != null)
             {
-                icon = saberDescriptor.CoverImage.DuplicateTexture().Downscale(128, 128).ToSprite(rename: saberDescriptor.SaberName);
+                icon = saberDescriptor.coverImage.DuplicateTexture().Downscale(128, 128).ToSprite(rename: saberDescriptor.saberName);
             }
 
             spriteCache.AddSprite(saberFile.Hash, icon);
 
-            var saberName = RichTextString.Create(saberDescriptor.SaberName);
-            var authorName = RichTextString.Create(saberDescriptor.AuthorName);
+            var saberName = RichTextString.Create(saberDescriptor.saberName);
+            var authorName = RichTextString.Create(saberDescriptor.authorName);
             var saberIcon = icon != null ? icon : PluginResources.NullCoverImage;
             var descriptor = new Descriptor(saberName, authorName, saberIcon);
             var hasTrails = CustomTrailUtils.GetTrailsFromCustomSaber(saberPrefab).Any();

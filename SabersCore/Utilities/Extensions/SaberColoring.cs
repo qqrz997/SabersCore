@@ -1,6 +1,6 @@
 ﻿using System;
-using SaberComponents.Components;
-using SaberComponents.Models;
+using AssetComponents.Components;
+using AssetComponents.Models;
 using SabersCore.Models;
 using UnityEngine;
 

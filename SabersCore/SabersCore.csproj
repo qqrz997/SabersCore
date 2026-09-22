@@ -41,6 +41,10 @@
             <Private>false</Private>
             <HintPath>$(BeatSaberDir)\Plugins\AssetBundleLoadingTools.dll</HintPath>
         </Reference>
+        <Reference Include="AssetComponents">
+            <HintPath>$(BeatSaberDir)\Libs\AssetComponents.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
         <Reference Include="BeatmapCore">
             <Private>false</Private>
             <HintPath>$(BeatSaberDir) Manager\BSManager\BSInstances\1.40.6\Beat Saber_Data\Managed\BeatmapCore.dll</HintPath>
@@ -94,10 +98,6 @@
         <Reference Include="Newtonsoft.Json">
           <Private>false</Private>
           <HintPath>$(BeatSaberDir)\Beat Saber_Data\Managed\Newtonsoft.Json.dll</HintPath>
-        </Reference>
-        <Reference Include="SaberComponents">
-            <HintPath>$(BeatSaberDir)\Libs\SaberComponents.dll</HintPath>
-            <Private>false</Private>
         </Reference>
         <Reference Include="SaberTrail" Publicize="true">
           <Private>false</Private>

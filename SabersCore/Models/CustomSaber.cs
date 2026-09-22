@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using SaberComponents.Components;
-using SaberComponents.Models;
+﻿using System.Linq;
+using AssetComponents.Components;
+using AssetComponents.Components.Sabers;
+using AssetComponents.Models;
 using SabersCore.Utilities.Extensions;
 using UnityEngine;
 

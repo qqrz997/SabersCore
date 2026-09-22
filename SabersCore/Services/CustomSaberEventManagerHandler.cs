@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using SaberComponents.Components;
+using AssetComponents.Components.Sabers;
 using SabersCore.Utilities.Extensions;
 using UnityEngine;
 

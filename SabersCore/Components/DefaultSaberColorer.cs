@@ -1,5 +1,4 @@
-﻿using SaberComponents.Models;
-using SabersCore.Utilities.Extensions;
+﻿using SabersCore.Utilities.Extensions;
 using UnityEngine;
 
 namespace SabersCore.Components;

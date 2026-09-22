@@ -1,4 +1,4 @@
-﻿using SaberComponents.Models;
+﻿using AssetComponents.Models;
 using SabersCore.Models;
 using SabersCore.Utilities.Common;
 using SabersCore.Utilities.Extensions;

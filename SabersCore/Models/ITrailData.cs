@@ -1,4 +1,4 @@
-using SaberComponents.Models;
+using AssetComponents.Models;
 using UnityEngine;
 
 namespace SabersCore.Models;

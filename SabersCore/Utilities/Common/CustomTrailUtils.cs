@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SaberComponents.Components;
+﻿using System.Linq;
+using AssetComponents.Components.Sabers;
 using SabersCore.Models;
 using UnityEngine;
 
