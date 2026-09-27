@@ -1,6 +1,4 @@
-﻿using AssetComponents.Models;
-using SabersCore.Models;
-using SabersCore.Utilities.Common;
+﻿using SabersCore.Models;
 using SabersCore.Utilities.Extensions;
 using UnityEngine;
 using Zenject;
@@ -34,37 +32,25 @@ public class CustomSaberTrail : SaberTrail
     
     public ITrailData TrailData => trailData;
 
-    public void SetColor(ColorScheme colorScheme)
+    public void SetColorScheme(ColorScheme colorScheme)
     {
-        if (trailData.UseTrailColor)
-        {
-            SetColor(trailData.CustomColor);
-            return;
-        }
-        var color = colorScheme.GetColorByType(trailData.ColorSchemeType);
-        SetColor(color);
+        foreach (var info in trailData.Colorizer.GetPropertiesWithColors(colorScheme)) SetColor(info);
     }
     
-    public void UpdateBoostColors(ColorScheme colorScheme, bool isBoostOn)
+    public void SetBoostColors(ColorScheme colorScheme, bool isBoostOn)
     {
-        var color = colorScheme.GetBoostColorByType(trailData.ColorSchemeType, isBoostOn);
-        SetColor(color);
+        foreach (var info in trailData.Colorizer.GetPropertiesWithBoostColors(colorScheme, isBoostOn)) SetColor(info);
     }
 
-    public void SetColor(Color color, SaberType saberType)
+    public void SetSpecificColor(Color color)
     {
-        if ((saberType == SaberType.SaberA && trailData.ColorSchemeType == ColorSchemeType.LeftSaber)
-            || (saberType == SaberType.SaberB && trailData.ColorSchemeType == ColorSchemeType.RightSaber))
-        {
-            SetColor(color);
-        }
+        foreach (var info in trailData.Colorizer.GetDefault()) SetColor(info);
     }
     
-    private void SetColor(Color color)
+    private void SetColor(TrailColorInfo trailColorInfo)
     {
-        _color = color * trailData.ColorMultiplier;
-        foreach (var trailMaterial in _trailRenderer._meshRenderer.materials)
-            trailMaterial.SetColor(MaterialProperties.Color, _color);
+        if (trailColorInfo.ApplyToVertexColor) _color = trailColorInfo.Color;
+        trailColorInfo.Material.SetColor(trailColorInfo.PropertyName, trailColorInfo.Color);
     }
     
     private new void Start()

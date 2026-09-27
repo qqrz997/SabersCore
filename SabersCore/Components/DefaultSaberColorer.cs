@@ -21,12 +21,7 @@ internal class DefaultSaberColorer
         SetColor(saberType == SaberType.SaberA ? colorScheme.saberAColor :  colorScheme.saberBColor);
     }
 
-    public void SetColor(Color color, SaberType saberType)
-    {
-        SetColor(color);
-    }
-
-    private void SetColor(Color color)
+    public void SetColor(Color color)
     {
         foreach (var setSaberGlowColor in setSaberGlowColors)
         {

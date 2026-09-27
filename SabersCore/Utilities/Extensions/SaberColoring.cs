@@ -8,19 +8,16 @@ namespace SabersCore.Utilities.Extensions;
 
 public static class SaberColoring
 {
-    public static bool UsesSaberColors(this MaterialColorer colorer) => colorer.colorSchemeType 
+    public static bool UsesSaberColors(this IColorer colorer) => colorer.ColorSchemeType 
         is ColorSchemeType.LeftSaber or ColorSchemeType.RightSaber;
 
-    public static bool UsesBoostColors(this MaterialColorer colorer) => colorer is {
-        useColorBoostEvents: true,
-        colorSchemeType: ColorSchemeType.EnvironmentColor0 or ColorSchemeType.EnvironmentColor1
+    public static bool UsesBoostColors(this IColorer colorer) => colorer is {
+        UseColorBoostEvents: true,
+        ColorSchemeType: ColorSchemeType.EnvironmentColor0 or ColorSchemeType.EnvironmentColor1
         or ColorSchemeType.EnvironmentColorW or ColorSchemeType.EnvironmentColor0Boost
         or ColorSchemeType.EnvironmentColor1Boost or ColorSchemeType.EnvironmentColorWBoost
     };
 
-    public static Color GetColorForTrail(this ColorScheme s, ITrailData trailData) =>
-        s.GetColorByType(trailData.ColorSchemeType);
-    
     public static Color GetColorByType(this ColorScheme s, ColorSchemeType t) => t switch
     {
         ColorSchemeType.LeftSaber => s.saberAColor,

@@ -14,15 +14,11 @@ public static class CustomTrailUtils
     public static ITrailData[] GetTrailsFromCustomSaber(GameObject saberObject) => saberObject
         .GetComponentsInChildren<CustomTrail>()
         .Where(ct => ct.top != null && ct.bottom != null) // is the CustomTrail valid?
-        .Select(trail => new CustomTrailData(
-            material: trail.material,
-            lengthSeconds: trail.length,
-            colorSchemeType: trail.colorSchemeType,
-            useColorBoostEvents: trail.useColorBoostEvents,
-            useTrailColor: trail.useTrailColor,
-            customColor: trail.trailColor,
-            colorMultiplier: trail.multiplierColor,
-            trailTopOffset: trail.top.position - saberObject.transform.position,
-            trailBottomOffset: trail.bottom.position - saberObject.transform.position))
+        .Select(ct => new CustomTrailData(
+            trailTopOffset: ct.top.position - saberObject.transform.position,
+            trailBottomOffset: ct.bottom.position - saberObject.transform.position,
+            materials: ct.materials,
+            lengthSeconds: ct.length,
+            colorizer: new TrailColorerTrailColorizer(ct.GetComponents<TrailColorer>())))
         .ToArray<ITrailData>();
 }

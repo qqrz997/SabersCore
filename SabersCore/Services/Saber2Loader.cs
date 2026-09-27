@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using AssetComponents.Models;
 using SabersCore.Models;
 using SabersCore.Utilities.Common;
 using SabersCore.Utilities.Extensions;
@@ -67,7 +68,7 @@ internal class Saber2Loader
                 return new NoSaberData(saberFile, SaberLoaderError.NullBundle);
             }
 
-            saberPrefab = await BundleLoading.LoadAsset<GameObject>(bundle, "_CustomSaber");
+            saberPrefab = await BundleLoading.LoadAsset<GameObject>(bundle, AssetBundleDefinition.SaberAssetName);
             if (saberPrefab == null)
             {
                 bundle.Unload(true);

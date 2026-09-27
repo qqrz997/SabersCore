@@ -50,18 +50,14 @@ internal class TrailFactory : ITrailFactory
 
         var trailInitData = new CustomSaberTrail.InitData(trailTop, trailBottom, trailData);
         var trail = container.InstantiateComponent<CustomSaberTrail>(saberObject, [trailInitData]);
-        var baseColor = (trailData.CustomColor * trailData.ColorMultiplier) with { a = intensity };
-
+        var baseColor = new Color(1f, 1f, 1f, intensity);
+        
         trail._trailDuration = trailData.LengthSeconds;
         trail._samplingFrequency = DefaultSamplingFrequency;
         trail._granularity = DefaultGranularity;
         trail._color = baseColor;
         trail._trailRenderer = gameResourcesProvider.CreateNewSaberTrailRenderer();
-        if (trailData.Material != null)
-        {
-            trail._trailRenderer._meshRenderer.material = trailData.Material;
-            trail._trailRenderer._meshRenderer.material.color = baseColor;
-        }
+        trail._trailRenderer._meshRenderer.sharedMaterials = trailData.Materials;
 
         return trail;
     }

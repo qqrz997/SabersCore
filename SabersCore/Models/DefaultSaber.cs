@@ -17,15 +17,17 @@ public class DefaultSaber : ISaber
         defaultSaberColorer = new(defaultSaberObject, saberType);
     }
 
-    public void SetColor(ColorScheme colorScheme) =>
-        defaultSaberColorer.SetColor(colorScheme);
-
-    public void SetColor(Color color, SaberType saberType)
+    public void SetColorScheme(ColorScheme colorScheme)
     {
-        defaultSaberColorer.SetColor(color, saberType);
+        defaultSaberColorer.SetColor(colorScheme);
     }
     
-    public void UpdateBoostColors(ColorScheme colorScheme, bool isBoostOn) { }
+    public void SetBoostColors(ColorScheme colorScheme, bool isBoostOn) { }
+
+    public void SetSpecificColor(Color color)
+    {
+        defaultSaberColorer.SetColor(color);
+    }
 
     public void SetParent(Transform parent)
     {

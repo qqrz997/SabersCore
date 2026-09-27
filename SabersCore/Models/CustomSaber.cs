@@ -24,45 +24,37 @@ internal class CustomSaber : ISaber
         GameObject = gameObject;
         GameObject.SetLayerRecursively(12);
         EventManager = gameObject.TryGetComponentOrAdd<EventManager>();
-        // colorableMaterials = CustomTrailUtils.GetColorableSaberMaterials(gameObject).ToArray();
         allColorers = gameObject.GetComponentsInChildren<MaterialColorer>() ?? [];
         saberColors = allColorers.Where(colorer => colorer.UsesSaberColors()).ToArray();
         boostColors = allColorers.Where(colorer => colorer.UsesBoostColors()).ToArray();
     }
 
-    public void SetColor(ColorScheme colorScheme)
+    public void SetColorScheme(ColorScheme colorScheme)
     {
         foreach (var colorer in allColorers)
         {
-            var color = colorScheme.GetColorByType(colorer.colorSchemeType);
-            colorer.materialPropertyBlock ??= new();
-            colorer.materialPropertyBlock.SetColor(colorer.propertyName, color * colorer.multiplierColor);
-            colorer.meshRenderer.SetPropertyBlock(colorer.materialPropertyBlock);
+            var color = colorScheme.GetColorByType(colorer.ColorSchemeType);
+            colorer.MaterialPropertyBlock.SetColor(colorer.PropertyName, color * colorer.MultiplierColor);
+            colorer.UpdateRendererProperties();
         }
     }
 
-    public void UpdateBoostColors(ColorScheme colorScheme, bool isBoostOn)
+    public void SetBoostColors(ColorScheme colorScheme, bool isBoostOn)
     {
         foreach (var colorer in boostColors)
         {
-            var color = colorScheme.GetBoostColorByType(colorer.colorSchemeType, isBoostOn);
-            colorer.materialPropertyBlock ??= new();
-            colorer.materialPropertyBlock.SetColor(colorer.propertyName, color * colorer.multiplierColor);
-            colorer.meshRenderer.SetPropertyBlock(colorer.materialPropertyBlock);
+            var color = colorScheme.GetBoostColorByType(colorer.ColorSchemeType, isBoostOn);
+            colorer.MaterialPropertyBlock.SetColor(colorer.PropertyName, color * colorer.MultiplierColor);
+            colorer.UpdateRendererProperties();
         }
     }
 
-    public void SetColor(Color color, SaberType saberType)
+    public void SetSpecificColor(Color color)
     {
         foreach (var colorer in saberColors)
         {
-            colorer.materialPropertyBlock ??= new();
-            if ((saberType == SaberType.SaberA && colorer.colorSchemeType == ColorSchemeType.LeftSaber)
-                || (saberType == SaberType.SaberB && colorer.colorSchemeType == ColorSchemeType.RightSaber))
-            {
-                colorer.materialPropertyBlock.SetColor(colorer.propertyName, color * colorer.multiplierColor);
-                colorer.meshRenderer.SetPropertyBlock(colorer.materialPropertyBlock);
-            }
+            colorer.MaterialPropertyBlock.SetColor(colorer.PropertyName, color * colorer.MultiplierColor);
+            colorer.UpdateRendererProperties();
         }
     }
 
