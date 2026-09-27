@@ -21,7 +21,7 @@ internal class GameResourcesProvider : IInitializable
         saberModelPrefab = LoadPrefab("Assets/Prefabs/Sabers/BasicSaberModel.prefab");
     }
 
-    public Material DefaultTrailMaterial => trailRendererPrefab._meshRenderer.material;
+    public Material DefaultTrailMaterial => trailRendererPrefab._meshRenderer.sharedMaterial;
     
     public SaberTrailRenderer CreateNewSaberTrailRenderer() => 
         container.InstantiatePrefabForComponentAt<SaberTrailRenderer>(
