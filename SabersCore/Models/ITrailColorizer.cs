@@ -8,18 +8,18 @@ namespace SabersCore.Models;
 public interface ITrailColorizer
 {
     /// <summary>
-    /// Gives each of the material's property names and the appropriate color to set.
+    /// Gives relevant information for coloring a trail and a color from a color scheme.
     /// </summary>
     public IEnumerable<TrailColorInfo> GetPropertiesWithColors(ColorScheme colorScheme);
     
     /// <summary>
-    /// Gives each of the material's property names and the appropriate color to set. Uses boost colors if necessary.
+    /// Gives relevant information for coloring a trail and a color from a color scheme, accounting for boost colors.
     /// </summary>
     public IEnumerable<TrailColorInfo> GetPropertiesWithBoostColors(
         ColorScheme colorScheme, bool boost);
     
     /// <summary>
-    /// Gives only the property names of the trail's materials 
+    /// Gives relevant information for coloring a trail to its default state.
     /// </summary>
     public IEnumerable<TrailColorInfo> GetDefault();
 }

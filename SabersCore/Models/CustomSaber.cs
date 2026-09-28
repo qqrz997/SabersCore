@@ -35,7 +35,7 @@ internal class CustomSaber : ISaber
         {
             var color = colorScheme.GetColorByType(colorer.ColorSchemeType);
             colorer.MaterialPropertyBlock.SetColor(colorer.PropertyName, color * colorer.MultiplierColor);
-            colorer.UpdateRendererProperties();
+            colorer.UpdatePropertyBlock();
         }
     }
 
@@ -45,7 +45,7 @@ internal class CustomSaber : ISaber
         {
             var color = colorScheme.GetBoostColorByType(colorer.ColorSchemeType, isBoostOn);
             colorer.MaterialPropertyBlock.SetColor(colorer.PropertyName, color * colorer.MultiplierColor);
-            colorer.UpdateRendererProperties();
+            colorer.UpdatePropertyBlock();
         }
     }
 
@@ -54,7 +54,7 @@ internal class CustomSaber : ISaber
         foreach (var colorer in saberColors)
         {
             colorer.MaterialPropertyBlock.SetColor(colorer.PropertyName, color * colorer.MultiplierColor);
-            colorer.UpdateRendererProperties();
+            colorer.UpdatePropertyBlock();
         }
     }
 
