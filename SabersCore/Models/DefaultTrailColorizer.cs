@@ -24,11 +24,11 @@ public class DefaultTrailColorizer : ITrailColorizer
     public IEnumerable<TrailColorInfo> GetPropertiesWithColors(ColorScheme colorScheme)
     {
         var colorSchemeType = saberType is SaberType.SaberA ? ColorSchemeType.LeftSaber : ColorSchemeType.RightSaber;
-        yield return new(material, ColorPropertyName, colorScheme.GetColorByType(colorSchemeType), true);
+        yield return new(material, 0, ColorPropertyName, colorScheme.GetColorByType(colorSchemeType), true);
     }
 
     public IEnumerable<TrailColorInfo> GetDefault()
     {
-        yield return new(material, ColorPropertyName, Color.white, true);
+        yield return new(material, 0, ColorPropertyName, Color.white, true);
     }
 }

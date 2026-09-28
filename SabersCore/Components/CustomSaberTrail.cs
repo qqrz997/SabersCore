@@ -8,6 +8,7 @@ namespace SabersCore.Components;
 public class CustomSaberTrail : SaberTrail
 {
     private readonly SaberMovementData customTrailMovementData = new();
+    private readonly MaterialPropertyBlock materialPropertyBlock = new();
 
     private TimeHelper timeHelper = null!;
     private Transform trailTop = null!;
@@ -50,7 +51,8 @@ public class CustomSaberTrail : SaberTrail
     private void SetColor(TrailColorInfo trailColorInfo)
     {
         if (trailColorInfo.ApplyToVertexColor) _color = trailColorInfo.Color;
-        trailColorInfo.Material.SetColor(trailColorInfo.PropertyName, trailColorInfo.Color);
+        materialPropertyBlock.SetColor(trailColorInfo.PropertyName, trailColorInfo.Color);
+        _trailRenderer._meshRenderer.SetPropertyBlock(materialPropertyBlock, trailColorInfo.MaterialIndex);
     }
     
     private new void Start()
