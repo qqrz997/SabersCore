@@ -9,7 +9,7 @@ public class DefaultTrailData : ITrailData
     public DefaultTrailData(Material defaultMaterial, SaberType saberType)
     {
         Materials = [defaultMaterial];
-        Colorizer = new DefaultTrailColorizer(defaultMaterial, saberType);
+        ColorProviders = [new DefaultTrailColorProvider(defaultMaterial, saberType)];
     }
     
     public Vector3 TrailTopOffset => Vector3.forward;
@@ -17,5 +17,6 @@ public class DefaultTrailData : ITrailData
     public Material[] Materials { get; }
 
     public float LengthSeconds => TrailUtils.DefaultDuration;
-    public ITrailColorizer Colorizer { get; }
+    
+    public ITrailColorProvider[] ColorProviders { get; }
 }

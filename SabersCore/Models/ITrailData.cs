@@ -14,5 +14,5 @@ public interface ITrailData
     
     public float LengthSeconds { get; }
 
-    public ITrailColorizer Colorizer { get; }
+    public ITrailColorProvider[] ColorProviders { get; }
 }

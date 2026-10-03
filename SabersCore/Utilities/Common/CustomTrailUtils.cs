@@ -11,7 +11,8 @@ public static class CustomTrailUtils
     /// Searches a CustomSaber's GameObject for any custom trails.
     /// </summary>
     /// <param name="saberObject">The GameObject of the custom saber</param>
-    public static ITrailData[] GetTrailsFromCustomSaber(GameObject saberObject) => saberObject
+    /// <param name="mirrorColors">Whether to mirror the colors to the opposite hand</param>
+    public static ITrailData[] GetTrailsFromCustomSaber(GameObject saberObject, bool mirrorColors = false) => saberObject
         .GetComponentsInChildren<CustomTrail>()
         .Where(ct => ct.top != null && ct.bottom != null) // is the CustomTrail valid?
         .Select(ct => new CustomTrailData(
@@ -19,6 +20,11 @@ public static class CustomTrailUtils
             trailBottomOffset: ct.bottom.position - saberObject.transform.position,
             materials: ct.materials,
             lengthSeconds: ct.length,
-            colorizer: new TrailColorerTrailColorizer(ct.GetComponents<TrailColorer>())))
+            colorProviders: ct.GetColorProviders(mirrorColors)))
         .ToArray<ITrailData>();
+
+    private static ITrailColorProvider[] GetColorProviders(this CustomTrail ct, bool mirrorColors) => ct
+        .GetComponents<TrailColorer>()
+        .Select(tc => new TrailColorProvider(tc, mirrorColors))
+        .ToArray<ITrailColorProvider>();
 }

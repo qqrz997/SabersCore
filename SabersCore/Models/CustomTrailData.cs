@@ -10,13 +10,13 @@ internal class CustomTrailData : ITrailData
         Vector3 trailBottomOffset,
         Material[] materials,
         float lengthSeconds,
-        ITrailColorizer colorizer)
+        ITrailColorProvider[] colorProviders)
     {
         TrailTopOffset = trailTopOffset;
         TrailBottomOffset = trailBottomOffset;
         Materials = materials;
         LengthSeconds = lengthSeconds;
-        Colorizer = colorizer;
+        ColorProviders = colorProviders;
     }
 
 
@@ -26,5 +26,5 @@ internal class CustomTrailData : ITrailData
     
     public float LengthSeconds { get; }
     
-    public ITrailColorizer Colorizer { get; }
+    public ITrailColorProvider[] ColorProviders { get; }
 }

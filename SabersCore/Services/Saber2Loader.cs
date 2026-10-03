@@ -3,6 +3,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using AssetComponents.Components.Sabers;
 using AssetComponents.Models;
 using SabersCore.Models;
 using SabersCore.Utilities.Common;
@@ -42,7 +43,6 @@ internal class Saber2Loader
             using var archive = new ZipArchive(fileStream, ZipArchiveMode.Read);
 
             var jsonEntry = archive.GetEntry("metadata.json");
-
             if (jsonEntry is null)
             {
                 return new NoSaberData(saberFile, SaberLoaderError.FileNotFound);
@@ -74,7 +74,14 @@ internal class Saber2Loader
                 bundle.Unload(true);
                 return new NoSaberData(saberFile, SaberLoaderError.NullAsset);
             }
-
+            
+            var saberDescriptor = saberPrefab.GetComponent<SaberDescriptor>();
+            if (saberDescriptor == null)
+            {
+                bundle.Unload(true);
+                return new NoSaberData(saberFile, SaberLoaderError.NullAsset);
+            }
+            
             saberPrefab.hideFlags |= HideFlags.DontUnloadUnusedAsset;
             saberPrefab.name += $" {saber2.ModelName}";
 
@@ -87,7 +94,8 @@ internal class Saber2Loader
             var descriptor = new Descriptor(saberName, authorName, saberIcon);
             var hasTrails = CustomTrailUtils.GetTrailsFromCustomSaber(saberPrefab).Any();
             var metadata = new CustomSaberMetadata(saberFile, SaberLoaderError.None, descriptor, hasTrails);
-            var saber2Prefab = new CustomSaberPrefab(saberPrefab);
+            var saber2Prefab = new CustomSaberPrefab(saberDescriptor);
+            
             return new CustomSaberData(metadata, saber2Prefab);
         }
         catch (Exception ex)

@@ -35,17 +35,20 @@ public class CustomSaberTrail : SaberTrail
 
     public void SetColorScheme(ColorScheme colorScheme)
     {
-        foreach (var info in trailData.Colorizer.GetPropertiesWithColors(colorScheme)) SetColor(info);
+        foreach (var provider in trailData.ColorProviders) 
+            SetColor(provider.GetColorInfo(colorScheme));
     }
     
     public void SetBoostColors(ColorScheme colorScheme, bool isBoostOn)
     {
-        foreach (var info in trailData.Colorizer.GetPropertiesWithBoostColors(colorScheme, isBoostOn)) SetColor(info);
+        foreach (var provider in trailData.ColorProviders) 
+            SetColor(provider.GetPropertiesWithBoostColors(colorScheme, isBoostOn));
     }
 
     public void SetSpecificColor(Color color)
     {
-        foreach (var info in trailData.Colorizer.GetDefault()) SetColor(info);
+        foreach (var provider in trailData.ColorProviders) 
+            SetColor(provider.GetDefault());
     }
     
     private void SetColor(TrailColorInfo trailColorInfo)

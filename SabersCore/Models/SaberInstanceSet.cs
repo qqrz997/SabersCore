@@ -26,19 +26,6 @@ public class SaberInstanceSet : IDisposable
         (LeftSaber, RightSaber, LeftTrails, RightTrails) = (leftSaber, rightSaber, leftTrails, rightTrails);
     
     /// <summary>
-    /// Instantiate a new saber instance from a saber prefab 
-    /// </summary>
-    /// <param name="saberPrefab">The root of the saber prefab</param>
-    public SaberInstanceSet(GameObject saberPrefab)
-    {
-        root = Instantiate(saberPrefab);
-        LeftSaber = new CustomSaber(root.transform.Find("LeftSaber").gameObject);
-        RightSaber = new CustomSaber(root.transform.Find("RightSaber").gameObject);
-        LeftTrails = [];
-        RightTrails = [];
-    }
-    
-    /// <summary>
     /// Creates a new saber set with the current sabers and the provided trails.
     /// This will not destroy any previous trail data.
     /// </summary>
