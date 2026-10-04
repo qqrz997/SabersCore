@@ -8,10 +8,10 @@ namespace SabersCore.Utilities.Extensions;
 
 public static class SaberColoring
 {
-    public static bool UsesSaberColors(this IColorer colorer) => colorer.ColorSchemeType 
+    public static bool UsesSaberColors(this IBeatSaberColorer colorer) => colorer.ColorSchemeType 
         is ColorSchemeType.LeftSaber or ColorSchemeType.RightSaber;
 
-    public static bool UsesBoostColors(this IColorer colorer) => colorer is {
+    public static bool UsesBoostColors(this IBeatSaberColorer colorer) => colorer is {
         UseColorBoostEvents: true,
         ColorSchemeType: ColorSchemeType.EnvironmentColor0 or ColorSchemeType.EnvironmentColor1
         or ColorSchemeType.EnvironmentColorW or ColorSchemeType.EnvironmentColor0Boost

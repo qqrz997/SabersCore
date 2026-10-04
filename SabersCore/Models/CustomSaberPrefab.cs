@@ -46,9 +46,9 @@ internal class CustomSaberPrefab : ISaberPrefab
     private static GameObject MirrorSaber(GameObject saber)
     {
         var mirrored = Object.Instantiate(saber, saber.transform.parent, false);
-        foreach (var colorer in mirrored.GetComponentsInChildren<IColorer>(true))
+        foreach (var colorer in mirrored.GetComponentsInChildren<IBeatSaberColorer>(true))
         {
-            colorer.MirrorColorType();
+            colorer.MirrorColorSchemeType();
         }
         return mirrored;
     }
